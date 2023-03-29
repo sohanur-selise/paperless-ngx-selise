@@ -27,7 +27,7 @@ python-gnupg = "*"
 python-dotenv = "*"
 python-dateutil = "*"
 python-magic = "*"
-psycopg2 = "*"
+psycopg2-binary = "*"
 rapidfuzz = "*"
 redis = {extras = ["hiredis"], version = "*"}
 scikit-learn = "~=1.1"
@@ -46,7 +46,6 @@ uvicorn = {extras = ["standard"], version = "*"}
 concurrent-log-handler = "*"
 "pdfminer.six" = "*"
 pyzbar = "*"
-mysqlclient = "*"
 celery = {extras = ["redis"], version = "*"}
 django-celery-results = "*"
 setproctitle = "*"
