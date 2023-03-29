@@ -133,7 +133,7 @@ class TaskAdmin(admin.ModelAdmin):
 admin.site.register(Correspondent, CorrespondentAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(DocumentType, DocumentTypeAdmin)
-admin.site.register(Document, DocumentAdmin)
+admin.site.register(Document)
 admin.site.register(SavedView, SavedViewAdmin)
 admin.site.register(StoragePath, StoragePathAdmin)
 admin.site.register(PaperlessTask, TaskAdmin)

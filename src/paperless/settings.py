@@ -17,8 +17,11 @@ from concurrent_log_handler.queue import setup_logging_queues
 from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 
+
+
 # Tap paperless.conf if it's available
-configuration_path = os.getenv("PAPERLESS_CONFIGURATION_PATH")
+
+configuration_path = "paperless.conf"
 if configuration_path and os.path.exists(configuration_path):
     load_dotenv(configuration_path)
 elif os.path.exists("../paperless.conf"):
@@ -27,6 +30,7 @@ elif os.path.exists("/etc/paperless.conf"):
     load_dotenv("/etc/paperless.conf")
 elif os.path.exists("/usr/local/etc/paperless.conf"):
     load_dotenv("/usr/local/etc/paperless.conf")
+
 
 # There are multiple levels of concurrency in paperless:
 #  - Multiple consumers may be run in parallel.
@@ -499,6 +503,9 @@ if os.getenv("PAPERLESS_DB_TIMEOUT") is not None:
         {"timeout": float(os.getenv("PAPERLESS_DB_TIMEOUT"))},
     )
 
+
+print(DATABASES)
+
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 ###############################################################################
@@ -880,3 +887,5 @@ def _get_nltk_language_setting(ocr_lang: str) -> Optional[str]:
 NLTK_ENABLED: Final[bool] = __get_boolean("PAPERLESS_ENABLE_NLTK", "yes")
 
 NLTK_LANGUAGE: Optional[str] = _get_nltk_language_setting(OCR_LANGUAGE)
+
+print('done.. settings..')
