@@ -43,11 +43,14 @@ COPY src .
 
 RUN mkdir /consume
 
-COPY static .
+
 
 # Run migrations and collect static files
 RUN python manage.py migrate && \
     python manage.py collectstatic --noinput
+
+
+COPY static/* static/
 
 # Expose port 8000 for the web server
 EXPOSE 8000

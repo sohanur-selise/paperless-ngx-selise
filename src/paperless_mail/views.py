@@ -3,7 +3,7 @@ from paperless_mail.models import MailAccount
 from paperless_mail.models import MailRule
 from paperless_mail.serialisers import MailAccountSerializer
 from paperless_mail.serialisers import MailRuleSerializer
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.viewsets import ModelViewSet
 
 
@@ -13,7 +13,7 @@ class MailAccountViewSet(ModelViewSet):
     queryset = MailAccount.objects.all().order_by("pk")
     serializer_class = MailAccountSerializer
     pagination_class = StandardPagination
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
 
     # TODO: user-scoped
     # def get_queryset(self):
@@ -30,7 +30,7 @@ class MailRuleViewSet(ModelViewSet):
     queryset = MailRule.objects.all().order_by("order")
     serializer_class = MailRuleSerializer
     pagination_class = StandardPagination
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
 
     # TODO: user-scoped
     # def get_queryset(self):

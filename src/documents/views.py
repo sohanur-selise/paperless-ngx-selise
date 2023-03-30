@@ -46,7 +46,7 @@ from rest_framework.mixins import DestroyModelMixin
 from rest_framework.mixins import ListModelMixin
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.mixins import UpdateModelMixin
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
@@ -147,7 +147,7 @@ class CorrespondentViewSet(ModelViewSet):
 
     serializer_class = CorrespondentSerializer
     pagination_class = StandardPagination
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     filterset_class = CorrespondentFilterSet
     ordering_fields = (
@@ -173,7 +173,7 @@ class TagViewSet(ModelViewSet):
             return TagSerializer
 
     pagination_class = StandardPagination
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     filterset_class = TagFilterSet
     ordering_fields = ("color", "name", "matching_algorithm", "match", "document_count")
@@ -188,7 +188,7 @@ class DocumentTypeViewSet(ModelViewSet):
 
     serializer_class = DocumentTypeSerializer
     pagination_class = StandardPagination
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     filterset_class = DocumentTypeFilterSet
     ordering_fields = ("name", "matching_algorithm", "match", "document_count")
@@ -205,7 +205,7 @@ class DocumentViewSet(
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
     pagination_class = StandardPagination
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
     filterset_class = DocumentFilterSet
     search_fields = ("title", "correspondent__name", "content")
@@ -547,7 +547,7 @@ class UnifiedSearchViewSet(DocumentViewSet):
 
 class LogViewSet(ViewSet):
 
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
 
     log_files = ["paperless", "mail"]
 
@@ -575,7 +575,7 @@ class SavedViewViewSet(ModelViewSet):
     queryset = SavedView.objects.all()
     serializer_class = SavedViewSerializer
     pagination_class = StandardPagination
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
 
     def get_queryset(self):
         user = self.request.user
@@ -587,7 +587,7 @@ class SavedViewViewSet(ModelViewSet):
 
 class BulkEditView(GenericAPIView):
 
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     serializer_class = BulkEditSerializer
     parser_classes = (parsers.JSONParser,)
 
@@ -609,7 +609,7 @@ class BulkEditView(GenericAPIView):
 
 class PostDocumentView(GenericAPIView):
 
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     serializer_class = PostDocumentSerializer
     parser_classes = (parsers.MultiPartParser,)
 
@@ -649,13 +649,12 @@ class PostDocumentView(GenericAPIView):
             task_id=task_id,
             override_created=created,
         )
-
         return Response(async_task.id)
 
 
 class SelectionDataView(GenericAPIView):
 
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     serializer_class = DocumentListSerializer
     parser_classes = (parsers.MultiPartParser, parsers.JSONParser)
 
@@ -713,7 +712,7 @@ class SelectionDataView(GenericAPIView):
 
 class SearchAutoCompleteView(APIView):
 
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
 
     def get(self, request, format=None):
         if "term" in request.query_params:
@@ -737,7 +736,7 @@ class SearchAutoCompleteView(APIView):
 
 class StatisticsView(APIView):
 
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
 
     def get(self, request, format=None):
         documents_total = Document.objects.all().count()
@@ -758,7 +757,7 @@ class StatisticsView(APIView):
 
 class BulkDownloadView(GenericAPIView):
 
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     serializer_class = BulkDownloadSerializer
     parser_classes = (parsers.JSONParser,)
 
@@ -851,7 +850,7 @@ class StoragePathViewSet(ModelViewSet):
 
     serializer_class = StoragePathSerializer
     pagination_class = StandardPagination
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     filterset_class = StoragePathFilterSet
     ordering_fields = ("name", "path", "matching_algorithm", "match", "document_count")
@@ -859,14 +858,14 @@ class StoragePathViewSet(ModelViewSet):
 
 class UiSettingsView(GenericAPIView):
 
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     serializer_class = UiSettingsViewSerializer
 
     def get(self, request, format=None):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
-        user = User.objects.get(pk=request.user.id)
+        user = User.objects.first()
+        # user = User.objects.get(pk=request.user.id)
         displayname = user.username
         if user.first_name or user.last_name:
             displayname = " ".join([user.first_name, user.last_name])
@@ -905,7 +904,7 @@ class UiSettingsView(GenericAPIView):
 
 class TasksViewSet(ReadOnlyModelViewSet):
 
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     serializer_class = TasksViewSerializer
 
     def get_queryset(self):
@@ -924,7 +923,7 @@ class TasksViewSet(ReadOnlyModelViewSet):
 
 class AcknowledgeTasksView(GenericAPIView):
 
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     serializer_class = AcknowledgeTasksViewSerializer
 
     def post(self, request, *args, **kwargs):

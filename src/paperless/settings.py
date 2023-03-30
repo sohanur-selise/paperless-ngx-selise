@@ -393,12 +393,14 @@ else:
 
 # We allow CORS from localhost:8000
 CORS_ALLOWED_ORIGINS = tuple(
-    os.getenv("PAPERLESS_CORS_ALLOWED_HOSTS", "http://localhost:8000").split(","),
+    os.getenv("PAPERLESS_CORS_ALLOWED_HOSTS", "http://localhost:4200").split(","),
 )
 
 if DEBUG:
     # Allow access from the angular development server during debugging
     CORS_ALLOWED_ORIGINS += ("http://localhost:4200",)
+
+print(DEBUG, CORS_ALLOWED_ORIGINS)
 
 _allowed_hosts = os.getenv("PAPERLESS_ALLOWED_HOSTS")
 if _allowed_hosts:
