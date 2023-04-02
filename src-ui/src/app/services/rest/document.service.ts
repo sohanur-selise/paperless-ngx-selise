@@ -92,6 +92,7 @@ export class DocumentService extends AbstractPaperlessService<PaperlessDocument>
     filterRules?: FilterRule[],
     extraParams = {}
   ): Observable<Results<PaperlessDocument>> {
+    
     return this.list(
       page,
       pageSize,

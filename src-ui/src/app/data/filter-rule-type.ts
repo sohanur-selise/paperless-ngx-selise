@@ -34,6 +34,8 @@ export const FILTER_MODIFIED_AFTER = 16
 export const FILTER_TITLE_CONTENT = 19
 export const FILTER_FULLTEXT_QUERY = 20
 export const FILTER_FULLTEXT_MORELIKE = 21
+export const FILTER_PAID_BEFORE = 30
+export const FILTER_PAID_AFTER = 31
 
 export const FILTER_RULE_TYPES: FilterRuleType[] = [
   {
@@ -149,6 +151,18 @@ export const FILTER_RULE_TYPES: FilterRuleType[] = [
   {
     id: FILTER_ADDED_AFTER,
     filtervar: 'added__date__gt',
+    datatype: 'date',
+    multi: false,
+  },
+  {
+    id: FILTER_PAID_BEFORE,
+    filtervar: 'paid__date__lt',
+    datatype: 'date',
+    multi: false,
+  },
+  {
+    id: FILTER_PAID_AFTER,
+    filtervar: 'paid__date__gt',
     datatype: 'date',
     multi: false,
   },

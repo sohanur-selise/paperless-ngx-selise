@@ -1,7 +1,7 @@
 <app-page-header [(title)]="title">
     <div class="input-group input-group-sm me-5 d-none d-md-flex" *ngIf="getContentType() === 'application/pdf' && !useNativePdfViewer">
       <div class="input-group-text" i18n>Page</div>
-      <input class="form-control flex-grow-0 w-auto" type="number" min="1" [max]="previewNumPages" [(ngModel)]="previewCurrentPage" />
+      <input class="flex-grow-0 w-auto form-control" type="number" min="1" [max]="previewNumPages" [(ngModel)]="previewCurrentPage" />
       <div class="input-group-text" i18n>of {{previewNumPages}}</div>
     </div>
 
@@ -21,7 +21,7 @@
 
         <div class="btn-group" ngbDropdown role="group" *ngIf="metadata?.has_archive_version">
             <button class="btn btn-sm btn-outline-primary dropdown-toggle-split" ngbDropdownToggle></button>
-            <div class="dropdown-menu shadow" ngbDropdownMenu>
+            <div class="shadow dropdown-menu" ngbDropdownMenu>
                 <a ngbDropdownItem [href]="downloadOriginalUrl" i18n>Download original</a>
             </div>
         </div>
@@ -63,7 +63,7 @@
 
 
 <div class="row">
-    <div class="col-md-6 col-xl-4 mb-4">
+    <div class="mb-4 col-md-6 col-xl-4">
 
         <form [formGroup]='documentForm' (ngSubmit)="save()">
 
@@ -75,6 +75,8 @@
                         <app-input-text #inputTitle i18n-title title="Title" formControlName="title" (keyup)="titleKeyUp($event)" [error]="error?.title"></app-input-text>
                         <app-input-number i18n-title title="Archive serial number" [error]="error?.archive_serial_number" formControlName='archive_serial_number'></app-input-number>
                         <app-input-date i18n-title title="Date created" formControlName="created_date" [suggestions]="suggestions?.dates"
+                            [error]="error?.created_date"></app-input-date>
+                        <app-input-date i18n-title title="Paid date" formControlName="paid_date" [suggestions]="suggestions?.dates"
                             [error]="error?.created_date"></app-input-date>
                         <app-input-select [items]="correspondents" i18n-title title="Correspondent" formControlName="correspondent" [allowNull]="true"
                             (createNew)="createCorrespondent($event)" [suggestions]="suggestions?.correspondents"></app-input-select>
@@ -160,7 +162,7 @@
                                 </ng-template>
                             </ng-container>
                             <ng-container *ngIf="getContentType() === 'text/plain'">
-                                <object [data]="previewUrl | safeUrl" type="text/plain" class="preview-sticky bg-white" width="100%"></object>
+                                <object [data]="previewUrl | safeUrl" type="text/plain" class="bg-white preview-sticky" width="100%"></object>
                             </ng-container>
                             <div *ngIf="requiresPassword" class="password-prompt">
                                 <form>
@@ -186,7 +188,7 @@
         </form>
     </div>
 
-    <div class="col-md-6 col-xl-8 mb-3 d-none d-md-block position-relative" #pdfPreview>
+    <div class="mb-3 col-md-6 col-xl-8 d-none d-md-block position-relative" #pdfPreview>
         <ng-container *ngIf="getContentType() === 'application/pdf'">
             <div class="preview-sticky pdf-viewer-container" *ngIf="!useNativePdfViewer ; else nativePdfViewer">
                 <pdf-viewer [src]="{ url: previewUrl, password: password }" [original-size]="false" [show-borders]="true" [show-all]="true" [(page)]="previewCurrentPage" [render-text-mode]="2" (error)="onError($event)" (after-load-complete)="pdfPreviewLoaded($event)"></pdf-viewer>
@@ -196,7 +198,7 @@
             </ng-template>
         </ng-container>
         <ng-container *ngIf="getContentType() === 'text/plain'">
-            <object [data]="previewUrl | safeUrl" type="text/plain" class="preview-sticky bg-white" width="100%"></object>
+            <object [data]="previewUrl | safeUrl" type="text/plain" class="bg-white preview-sticky" width="100%"></object>
         </ng-container>
         <div *ngIf="requiresPassword" class="password-prompt">
             <form>

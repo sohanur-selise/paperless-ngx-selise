@@ -14,6 +14,7 @@ export interface SearchHit {
 }
 
 export interface PaperlessDocument extends ObjectWithId {
+  paid_date?: Date
   correspondent$?: Observable<PaperlessCorrespondent>
 
   correspondent?: number

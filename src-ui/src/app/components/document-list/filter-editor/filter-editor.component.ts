@@ -20,6 +20,8 @@ import { filterRulesDiffer, FilterRule } from 'src/app/data/filter-rule'
 import {
   FILTER_ADDED_AFTER,
   FILTER_ADDED_BEFORE,
+  FILTER_PAID_BEFORE,
+  FILTER_PAID_AFTER,
   FILTER_ASN,
   FILTER_CORRESPONDENT,
   FILTER_CREATED_AFTER,
@@ -60,6 +62,7 @@ const TEXT_FILTER_MODIFIER_LT = 'less'
 
 const RELATIVE_DATE_QUERY_REGEXP_CREATED = /created:\[([^\]]+)\]/g
 const RELATIVE_DATE_QUERY_REGEXP_ADDED = /added:\[([^\]]+)\]/g
+const RELATIVE_DATE_QUERY_REGEXP_PAID = /paid:\[([^\]]+)\]/g
 const RELATIVE_DATE_QUERYSTRINGS = [
   {
     relativeDate: RelativeDate.LAST_7_DAYS,
@@ -173,8 +176,10 @@ export class FilterEditorComponent implements OnInit, OnDestroy {
   textFilterTarget = TEXT_FILTER_TARGET_TITLE_CONTENT
 
   get textFilterTargetName() {
-    return this.textFilterTargets.find((t) => t.id == this.textFilterTarget)
-      ?.name
+    const t = this.textFilterTargets.find(
+      (t) => t.id == this.textFilterTarget
+    )?.name
+    return t
   }
 
   public textFilterModifier: string
@@ -219,8 +224,11 @@ export class FilterEditorComponent implements OnInit, OnDestroy {
   dateCreatedAfter: string
   dateAddedBefore: string
   dateAddedAfter: string
+  datePaidBefore: string
+  datePaidAfter: string
   dateCreatedRelativeDate: RelativeDate
   dateAddedRelativeDate: RelativeDate
+  datePaidRelativeDate: RelativeDate
 
   _unmodifiedFilterRules: FilterRule[] = []
   _filterRules: FilterRule[] = []
@@ -240,8 +248,8 @@ export class FilterEditorComponent implements OnInit, OnDestroy {
 
   @Input()
   set filterRules(value: FilterRule[]) {
-    this._filterRules = value
 
+    this._filterRules = value
     this.documentTypeSelectionModel.clear(false)
     this.storagePathSelectionModel.clear(false)
     this.tagSelectionModel.clear(false)
@@ -254,6 +262,10 @@ export class FilterEditorComponent implements OnInit, OnDestroy {
     this.dateCreatedAfter = null
     this.dateCreatedRelativeDate = null
     this.dateAddedRelativeDate = null
+    this.datePaidAfter = null
+    this.datePaidBefore = null
+    this.datePaidRelativeDate = null
+
     this.textFilterModifier = TEXT_FILTER_MODIFIER_EQUALS
 
     value.forEach((rule) => {
@@ -296,6 +308,16 @@ export class FilterEditorComponent implements OnInit, OnDestroy {
                   }
                 }
               )
+            } else if (arg.match(RELATIVE_DATE_QUERY_REGEXP_PAID)) {
+              ;[...arg.matchAll(RELATIVE_DATE_QUERY_REGEXP_PAID)].forEach(
+                (match) => {
+                  if (match[1]?.length) {
+                    this.datePaidRelativeDate = RELATIVE_DATE_QUERYSTRINGS.find(
+                      (qS) => qS.dateQuery == match[1]
+                    )?.relativeDate
+                  }
+                }
+              )
             } else {
               textQueryArgs.push(arg)
             }
@@ -324,6 +346,13 @@ export class FilterEditorComponent implements OnInit, OnDestroy {
           break
         case FILTER_ADDED_BEFORE:
           this.dateAddedBefore = rule.value
+          break
+        case FILTER_PAID_AFTER:
+          this.datePaidAfter = rule.value
+          break
+        case FILTER_PAID_BEFORE:
+          
+          this.datePaidBefore = rule.value
           break
         case FILTER_HAS_TAGS_ALL:
           this.tagSelectionModel.set(
@@ -504,6 +533,7 @@ export class FilterEditorComponent implements OnInit, OnDestroy {
         value: storagePath.id?.toString(),
       })
     })
+    
     if (this.dateCreatedBefore) {
       filterRules.push({
         rule_type: FILTER_CREATED_BEFORE,
@@ -528,9 +558,22 @@ export class FilterEditorComponent implements OnInit, OnDestroy {
         value: this.dateAddedAfter,
       })
     }
+    if (this.datePaidBefore) {
+      filterRules.push({
+        rule_type: FILTER_PAID_BEFORE,
+        value: this.datePaidBefore,
+      })
+    }
+    if (this.datePaidAfter) {
+      filterRules.push({
+        rule_type: FILTER_PAID_AFTER,
+        value: this.datePaidAfter,
+      })
+    }
     if (
       this.dateAddedRelativeDate !== null ||
-      this.dateCreatedRelativeDate !== null
+      this.dateCreatedRelativeDate !== null ||
+      this.datePaidRelativeDate !== null
     ) {
       let queryArgs: Array<string> = []
       let existingRule = filterRules.find(
@@ -566,11 +609,27 @@ export class FilterEditorComponent implements OnInit, OnDestroy {
             .concat(queryArgs)
         }
       }
+
       if (this.dateAddedRelativeDate !== null) {
         queryArgs.push(
           `added:[${
             RELATIVE_DATE_QUERYSTRINGS.find(
               (qS) => qS.relativeDate == this.dateAddedRelativeDate
+            ).dateQuery
+          }]`
+        )
+        if (existingRule) {
+          queryArgs = existingRuleArgs
+            .filter((arg) => !arg.match(RELATIVE_DATE_QUERY_REGEXP_ADDED))
+            .concat(queryArgs)
+        }
+      }
+
+      if (this.datePaidRelativeDate !== null) {
+        queryArgs.push(
+          `paid:[${
+            RELATIVE_DATE_QUERYSTRINGS.find(
+              (qS) => qS.relativeDate == this.datePaidRelativeDate
             ).dateQuery
           }]`
         )
@@ -590,21 +649,25 @@ export class FilterEditorComponent implements OnInit, OnDestroy {
         })
       }
     }
+
     if (
       this.dateCreatedRelativeDate == null &&
-      this.dateAddedRelativeDate == null
+      this.dateAddedRelativeDate == null &&
+      this.datePaidRelativeDate == null
     ) {
       const existingRule = filterRules.find(
         (fr) => fr.rule_type == FILTER_FULLTEXT_QUERY
       )
       if (
         existingRule?.value.match(RELATIVE_DATE_QUERY_REGEXP_CREATED) ||
-        existingRule?.value.match(RELATIVE_DATE_QUERY_REGEXP_ADDED)
+        existingRule?.value.match(RELATIVE_DATE_QUERY_REGEXP_ADDED) ||
+        existingRule?.value.match(RELATIVE_DATE_QUERY_REGEXP_PAID)
       ) {
         // remove any existing date query
         existingRule.value = existingRule.value
           .replace(RELATIVE_DATE_QUERY_REGEXP_CREATED, '')
           .replace(RELATIVE_DATE_QUERY_REGEXP_ADDED, '')
+          .replace(RELATIVE_DATE_QUERY_REGEXP_PAID, '')
         if (existingRule.value.replace(',', '').trim() === '') {
           // if its empty now, remove it entirely
           filterRules.splice(filterRules.indexOf(existingRule), 1)

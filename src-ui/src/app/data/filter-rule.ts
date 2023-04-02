@@ -29,6 +29,7 @@ export function filterRulesDiffer(
   filterRulesA: FilterRule[],
   filterRulesB: FilterRule[]
 ): boolean {
+  
   let differ = false
   if (filterRulesA.length != filterRulesB.length) {
     differ = true
