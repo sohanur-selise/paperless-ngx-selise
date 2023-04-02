@@ -76,7 +76,7 @@
                         <app-input-number i18n-title title="Archive serial number" [error]="error?.archive_serial_number" formControlName='archive_serial_number'></app-input-number>
                         <app-input-date i18n-title title="Date created" formControlName="created_date" [suggestions]="suggestions?.dates"
                             [error]="error?.created_date"></app-input-date>
-                        <app-input-date i18n-title title="Paid date" formControlName="paid_date" [suggestions]="suggestions?.dates"
+                        <app-input-date i18n-title title="Paid date" formControlName="paid" [suggestions]="suggestions?.dates"
                             [error]="error?.created_date"></app-input-date>
                         <app-input-select [items]="correspondents" i18n-title title="Correspondent" formControlName="correspondent" [allowNull]="true"
                             (createNew)="createCorrespondent($event)" [suggestions]="suggestions?.correspondents"></app-input-select>
