@@ -400,8 +400,6 @@ if DEBUG:
     # Allow access from the angular development server during debugging
     CORS_ALLOWED_ORIGINS += ("http://localhost:4200",)
 
-print(DEBUG, CORS_ALLOWED_ORIGINS)
-
 _allowed_hosts = os.getenv("PAPERLESS_ALLOWED_HOSTS")
 if _allowed_hosts:
     ALLOWED_HOSTS = _allowed_hosts.split(",")
@@ -504,9 +502,6 @@ if os.getenv("PAPERLESS_DB_TIMEOUT") is not None:
     DATABASES["default"]["OPTIONS"].update(
         {"timeout": float(os.getenv("PAPERLESS_DB_TIMEOUT"))},
     )
-
-
-print(DATABASES)
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
@@ -890,4 +885,3 @@ NLTK_ENABLED: Final[bool] = __get_boolean("PAPERLESS_ENABLE_NLTK", "yes")
 
 NLTK_LANGUAGE: Optional[str] = _get_nltk_language_setting(OCR_LANGUAGE)
 
-print('done.. settings..')

@@ -865,8 +865,8 @@ class UiSettingsView(GenericAPIView):
     def get(self, request, format=None):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = User.objects.first()
-        # user = User.objects.get(pk=request.user.id)
+        # user = User.objects.first()
+        user = User.objects.get(pk=request.user.id)
         displayname = user.username
         if user.first_name or user.last_name:
             displayname = " ".join([user.first_name, user.last_name])

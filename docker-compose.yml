@@ -50,7 +50,14 @@ services:
 
   webserver:
 #    image: ghcr.io/paperless-ngx/paperless-ngx:latest
-    build: .
+    build:
+        context: .
+        args:
+          QPDF_VERSION: 11.2.0
+          PIKEPDF_VERSION: 6.2.8.post1
+          PSYCOPG2_VERSION: 2.9.5
+          JBIG2ENC_VERSION: 0.29
+          TARGETARCH : amd64
     restart: unless-stopped
     depends_on:
       - db
