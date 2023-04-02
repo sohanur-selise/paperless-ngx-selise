@@ -215,6 +215,7 @@ class DocumentViewSet(
         "correspondent__name",
         "document_type__name",
         "created",
+        "paid",
         "modified",
         "added",
         "archive_serial_number",

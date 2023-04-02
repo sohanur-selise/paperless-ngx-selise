@@ -224,6 +224,7 @@ class DocumentSerializer(DynamicFieldsModelSerializer):
     original_file_name = SerializerMethodField()
     archived_file_name = SerializerMethodField()
     created_date = serializers.DateField(required=False)
+    paid_date = serializers.DateField(required=False)
 
     def get_original_file_name(self, obj):
         return obj.get_public_filename()
@@ -248,8 +249,23 @@ class DocumentSerializer(DynamicFieldsModelSerializer):
             )
             instance.created = new_datetime
             instance.save()
+        if "paid_date" in validated_data and "paid" not in validated_data:
+            new_datetime = datetime.datetime.combine(
+                validated_data.get("paid"),
+                datetime.time(0, 0, 0, 0,
+                              zoneinfo.ZoneInfo(settings.TIME_ZONE)),
+            )
+            instance.paid = new_datetime
+            instance.save()
+
         if "created_date" in validated_data:
             validated_data.pop("created_date")
+
+        print(validated_data)
+
+        if "paid_date" in validated_data:
+            validated_data.pop("paid_date")
+
         super().update(instance, validated_data)
         return instance
 
@@ -271,6 +287,8 @@ class DocumentSerializer(DynamicFieldsModelSerializer):
             "tags",
             "created",
             "created_date",
+            "paid",
+            "paid_date",
             "modified",
             "added",
             "archive_serial_number",

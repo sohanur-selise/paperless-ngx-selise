@@ -46,7 +46,7 @@ RUN mkdir /consume
 
 
 # Run migrations and collect static files
-RUN python manage.py migrate && \
+RUN python manage.py makemigrations && python manage.py migrate && \
     python manage.py collectstatic --noinput
 
 # Expose port 8000 for the web server

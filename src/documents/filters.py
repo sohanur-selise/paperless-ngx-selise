@@ -105,6 +105,7 @@ class DocumentFilterSet(FilterSet):
             "content": CHAR_KWARGS,
             "archive_serial_number": INT_KWARGS,
             "created": DATE_KWARGS,
+            "paid": DATE_KWARGS,
             "added": DATE_KWARGS,
             "modified": DATE_KWARGS,
             "correspondent": ["isnull"],

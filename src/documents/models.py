@@ -162,7 +162,7 @@ class Document(models.Model):
     checksum = models.CharField(
         _("checksum"),
         max_length=32,
-        editable=False,
+        editable=True,
         unique=True,
         help_text=_("The checksum of the original document."),
     )
@@ -183,6 +183,13 @@ class Document(models.Model):
         auto_now=True,
         editable=False,
         db_index=True,
+    )
+
+    paid = models.DateTimeField(
+        _("paid"),
+        auto_now=False,
+        null=True,
+        blank=True,
     )
 
     storage_type = models.CharField(
@@ -336,6 +343,10 @@ class Document(models.Model):
     @property
     def created_date(self):
         return timezone.localdate(self.created)
+
+    @property
+    def paid_date(self):
+        return timezone.localdate(self.paid)
 
 
 class Log(models.Model):
