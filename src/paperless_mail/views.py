@@ -13,7 +13,7 @@ class MailAccountViewSet(ModelViewSet):
     queryset = MailAccount.objects.all().order_by("pk")
     serializer_class = MailAccountSerializer
     pagination_class = StandardPagination
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     # TODO: user-scoped
     # def get_queryset(self):
@@ -30,7 +30,7 @@ class MailRuleViewSet(ModelViewSet):
     queryset = MailRule.objects.all().order_by("order")
     serializer_class = MailRuleSerializer
     pagination_class = StandardPagination
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     # TODO: user-scoped
     # def get_queryset(self):

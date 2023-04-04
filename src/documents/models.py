@@ -188,8 +188,8 @@ class Document(models.Model):
     paid = models.DateTimeField(
         _("paid"),
         auto_now=False,
-        null=True,
-        blank=True,
+        editable=True,
+        db_index=True,
     )
 
     storage_type = models.CharField(

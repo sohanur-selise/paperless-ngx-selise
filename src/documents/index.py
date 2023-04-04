@@ -46,6 +46,7 @@ def get_schema():
         type_id=NUMERIC(),
         has_type=BOOLEAN(),
         created=DATETIME(sortable=True),
+        paid=DATETIME(sortable=True),
         modified=DATETIME(sortable=True),
         added=DATETIME(sortable=True),
         path=TEXT(sortable=True),
@@ -120,6 +121,7 @@ def update_document(writer: AsyncWriter, doc: Document):
         type_id=doc.document_type.id if doc.document_type else None,
         has_type=doc.document_type is not None,
         created=doc.created,
+        paid=doc.paid,
         added=doc.added,
         asn=asn,
         modified=doc.modified,
@@ -201,6 +203,7 @@ class DelayedQuery:
 
         sort_fields_map = {
             "created": "created",
+            "paid": "paid",
             "modified": "modified",
             "added": "added",
             "title": "title",
@@ -277,11 +280,9 @@ class DelayedFullTextQuery(DelayedQuery):
         )
         qp.add_plugin(DateParserPlugin(basedate=timezone.now()))
         q = qp.parse(q_str)
-
         corrected = self.searcher.correct_query(q, q_str)
         if corrected.query != q:
             corrected.query = corrected.string
-
         return q, None
 
 
