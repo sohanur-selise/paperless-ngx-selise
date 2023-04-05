@@ -21,20 +21,13 @@ services:
       POSTGRES_PASSWORD: paperless
 
   webserver:
-    build:
-        context: .
-        args:
-          QPDF_VERSION: 11.2.0
-          PIKEPDF_VERSION: 6.2.8.post1
-          PSYCOPG2_VERSION: 2.9.5
-          JBIG2ENC_VERSION: 0.29
-          TARGETARCH : amd64
+    image: sohanselise/paperless-ngx-v2
     restart: unless-stopped
     depends_on:
       - db
       - broker
     ports:
-      - "8000:8000"
+      - "80:8000"
     healthcheck:
       test: ["CMD", "curl", "-fs", "-S", "--max-time", "2", "http://localhost:8000"]
       interval: 30s
