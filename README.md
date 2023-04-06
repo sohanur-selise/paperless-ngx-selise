@@ -61,11 +61,13 @@ A demo is available at [demo.paperless-ngx.com](https://demo.paperless-ngx.com) 
 
 # Installation
 
-You can run this project by running this docker-compose files:
+To run this paperless-ngx project with postgres database, you can use the following docker-compose files:
 
 ```bash
 docker-compose -f docker-compose.stage.yml up --build -d
 ```
+
+You could change the database configuration by editing the 'paperless.conf' file.
 
 Alternatively, you can install the dependencies and setup apache and a database server yourself. The [documentation](https://docs.paperless-ngx.com/setup/#installation) has a step by step guide on how to do it.
 
