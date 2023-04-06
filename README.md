@@ -59,11 +59,9 @@ A demo is available at [demo.paperless-ngx.com](https://demo.paperless-ngx.com) 
 - The integrated sanity checker makes sure that your document archive is in good health.
 - [More screenshots are available in the documentation](https://docs.paperless-ngx.com/#screenshots).
 
-# Getting started
+# Installation
 
-The easiest way to deploy paperless is docker-compose. The files in the [`/docker/compose` directory](https://github.com/paperless-ngx/paperless-ngx/tree/main/docker/compose) are configured to pull the image from Github Packages.
-
-If you'd like to jump right in, you can configure a docker-compose environment with our install script:
+You can run this project by running this docker-compose files:
 
 ```bash
 docker-compose -f docker-compose.stage.yml up --build -d
