@@ -21,6 +21,7 @@ export const DOCUMENT_SORT_FIELDS = [
   { field: 'document_type__name', name: $localize`Document type` },
   { field: 'created', name: $localize`Created` },
   { field: 'added', name: $localize`Added` },
+  { field: 'paid', name: $localize`Paid` },
   { field: 'modified', name: $localize`Modified` },
 ]
 
