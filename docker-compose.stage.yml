@@ -21,7 +21,7 @@ services:
       POSTGRES_PASSWORD: paperless
 
   webserver:
-    image: sohanselise/paperless-ngx-v2
+    image: sohanselise/paperless-ngx-v2:v.02
     restart: unless-stopped
     depends_on:
       - db
